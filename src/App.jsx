@@ -1180,7 +1180,7 @@ function App() {
                 <div>
                     <div className='uninitiated' id="uniTop">
                         <div className="logo">
-                            <img src='src/assets/archess.png'/>
+                            <img src='public/archess.png'/>
                         </div>
                     </div>
                     <div className='bot-wrap'>
@@ -1196,26 +1196,26 @@ function App() {
                 </div>
             }
             <div className="logo">
-                <img src='src/assets/archess.png'/>
+                <img src='public/archess.png'/>
             </div>
             <div className="footer-wrapper">
                 <div className="footer">
                     <div style={{display: 'flex', alignItems:'center'}}>
-                        <img className='sep sep1' src='src/assets/ws.png'/>
+                        <img className='sep sep1' src='public/ws.png'/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerW'>White | {dispWT}</h1>
                             <h6 className="material mW">Points captured: {captured.white.points}</h6>
                         </div>
-                        <img className='sep sep2' src='src/assets/ws.png'/>
+                        <img className='sep sep2' src='public/ws.png'/>
                     </div>
                     <Eval captured={captured} winner={winner}/>
                     <div style={{display: 'flex', alignItems:'center'}}>
-                        <img className='sep sep1' src='src/assets/bs.png'/>
+                        <img className='sep sep1' src='public/bs.png'/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerB'>Black | {dispBT}</h1>
                             <h6 className="material mB">Points captured: {captured.black.points}</h6>
                         </div>
-                        <img className='sep sep2' src='src/assets/bs.png'/>
+                        <img className='sep sep2' src='public/bs.png'/>
                     </div>
                 </div>
             </div>

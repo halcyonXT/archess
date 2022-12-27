@@ -45,7 +45,7 @@ export default function Table(props) {
             case "none":
                 break;
             default:
-                piece = <img src={`src/assets/${props.cells[item].side}${props.cells[item].piece}.png`} 
+                piece = <img src={`public/${props.cells[item].side}${props.cells[item].piece}.png`} 
                 className="h-12 imgsettings" />
                 break;
         }
