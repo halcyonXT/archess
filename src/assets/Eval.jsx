@@ -24,10 +24,10 @@ export default function Eval(props) {
     }
 
     let dispW = props.captured.white.pieces.map(piece => {
-        return <img src={`public/black${piece}.png`} style={{height:'25px', marginRight: '-2px'}}/>
+        return <img src={`/black${piece}.png`} style={{height:'25px', marginRight: '-2px'}}/>
     })
     let dispB = props.captured.black.pieces.map(piece => {
-        return <img src={`public/white${piece}.png`} style={{height:'25px', marginLeft: '-4px'}}/>
+        return <img src={`/white${piece}.png`} style={{height:'25px', marginLeft: '-4px'}}/>
     })
 
     diff = diff <= 0 ? diff : `+${diff}`

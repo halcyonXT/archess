@@ -38,14 +38,14 @@ export default function Table(props) {
         <div className="cell">{content}</div>
     </td>
 
-    //RENDERER OF PIECES AND CELLS
+    //RENDERER OF PIECES AND CELLSs
     for (let item in props.cells) {
         let piece = ''
         switch(props.cells[item].piece) {
             case "none":
                 break;
             default:
-                piece = <img src={`public/${props.cells[item].side}${props.cells[item].piece}.png`} 
+                piece = <img src={`/${props.cells[item].side}${props.cells[item].piece}.png`} 
                 className="h-12 imgsettings" />
                 break;
         }
