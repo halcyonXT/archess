@@ -1,4 +1,16 @@
 import React from "react"
+import blackking from '/blackking.png'
+import blackqueen from '/blackqueen.png'
+import blackknight from '/blackknight.png'
+import blackbishop from '/blackbishop.png'
+import blackrook from '/blackrook.png'
+import blackpawn from '/blackpawn.png'
+import whiteking from '/whiteking.png'
+import whitequeen from '/whitequeen.png'
+import whiteknight from '/whiteknight.png'
+import whitebishop from '/whitebishop.png'
+import whiterook from '/whiterook.png'
+import whitepawn from '/whitepawn.png'
 
 export default function Table(props) {
 
@@ -45,8 +57,54 @@ export default function Table(props) {
             case "none":
                 break;
             default:
-                piece = <img src={`/${props.cells[item].side}${props.cells[item].piece}.png`} 
-                className="h-12 imgsettings" />
+                /*piece = <img src={`/${props.cells[item].side}${props.cells[item].piece}.png`} 
+                className="h-12 imgsettings" />*/
+                switch (props.cells[item].side) {
+                    case 'black':
+                        switch (props.cells[item].piece) {
+                            case 'king':
+                                piece = <img src={blackking} className='imgsettings' />
+                                break
+                            case 'queen':
+                                piece = <img src={blackqueen} className='imgsettings' />
+                                break
+                            case 'knight':
+                                piece = <img src={blackknight} className='imgsettings' />
+                                break
+                            case 'bishop':
+                                piece = <img src={blackbishop} className='imgsettings' />
+                                break
+                            case 'rook':
+                                piece = <img src={blackrook} className='imgsettings' />
+                                break
+                            case 'pawn':
+                                piece = <img src={blackpawn} className='imgsettings' />
+                                break
+                        }
+                        break
+                    case 'white':
+                        switch (props.cells[item].piece) {
+                            case 'king':
+                                piece = <img src={whiteking} className='imgsettings' />
+                                break
+                            case 'queen':
+                                piece = <img src={whitequeen} className='imgsettings' />
+                                break
+                            case 'knight':
+                                piece = <img src={whiteknight} className='imgsettings' />
+                                break
+                            case 'bishop':
+                                piece = <img src={whitebishop} className='imgsettings' />
+                                break
+                            case 'rook':
+                                piece = <img src={whiterook} className='imgsettings' />
+                                break
+                            case 'pawn':
+                                piece = <img src={whitepawn} className='imgsettings' />
+                                break
+                        }
+                        break
+                }
                 break;
         }
         if (props.cells[item].Y % 2 === 0) {

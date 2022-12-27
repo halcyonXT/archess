@@ -8,6 +8,9 @@ import move3 from './assets/move3.mp3'
 import capture1 from './assets/capture1.mp3'
 import capture2 from './assets/capture2.mp3'
 import capture3 from './assets/capture3.mp3'
+import archess from '/archess.png'
+import bspng from '/bs.png'
+import wspng from '/ws.png'
 
 let pawnsqrs = [8,9,10,11,12,13,14,15,55,54,53,52,51,50,49,48]
 function tableTemplate() {
@@ -1180,7 +1183,7 @@ function App() {
                 <div>
                     <div className='uninitiated' id="uniTop">
                         <div className="logo">
-                            <img src='/archess.png'/>
+                            <img src={archess}/>
                         </div>
                     </div>
                     <div className='bot-wrap'>
@@ -1196,26 +1199,26 @@ function App() {
                 </div>
             }
             <div className="logo">
-                <img src='/archess.png'/>
+                <img src={archess} />
             </div>
             <div className="footer-wrapper">
                 <div className="footer">
                     <div style={{display: 'flex', alignItems:'center'}}>
-                        <img className='sep sep1' src='/ws.png'/>
+                        <img className='sep sep1' src={wspng}/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerW'>White | {dispWT}</h1>
                             <h6 className="material mW">Points captured: {captured.white.points}</h6>
                         </div>
-                        <img className='sep sep2' src='/ws.png'/>
+                        <img className='sep sep2' src={wspng}/>
                     </div>
                     <Eval captured={captured} winner={winner}/>
                     <div style={{display: 'flex', alignItems:'center'}}>
-                        <img className='sep sep1' src='/bs.png'/>
+                        <img className='sep sep1' src={bspng}/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerB'>Black | {dispBT}</h1>
                             <h6 className="material mB">Points captured: {captured.black.points}</h6>
                         </div>
-                        <img className='sep sep2' src='/bs.png'/>
+                        <img className='sep sep2' src={bspng}/>
                     </div>
                 </div>
             </div>
