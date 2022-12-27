@@ -1,0 +1,289 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #E5C299;
+    font-family: 'Raleway', sans-serif;
+    overflow: hidden;
+}
+
+.cell {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.mainframe {
+    border-radius: 2px;
+    border: 2px solid #fed7aa;
+    outline: 6px double #3e4140;
+    box-shadow: white 4px 0px 0px, white 0px 4px 0px, white 4px 4px 0px, white -4px 0px 0px, white 0px -4px 0px, white -4px -4px 0px, white -4px 4px 0px, white 4px -4px 0px
+}
+
+.imgsettings {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.logo {
+    position: absolute;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 70px;
+    background-color: gray;
+}
+.logo > img {pointer-events: none; user-select: none; -webkit-user-drag: none;}
+
+.footer {
+    position: absolute;
+    z-index: 21;
+    width: 100%;
+    height: 70px;
+    background-color: gray;
+    margin-top: calc(100vh - 70px);
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.timer {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white;
+    margin: 0;
+    border: 2px solid white;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 4px;
+    box-shadow: inset 0px 0px 20px -3px rgba(255, 255, 255, 0.4);
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    border-right: none;
+    border-left: none;
+}
+
+.timerB {
+    color: #3e4140;
+    border: 2px solid #3e4140;
+    box-shadow: inset 0px 0px 20px -3px rgba(0, 0, 0, 0.4);
+    border-right: none;
+    border-left: none;
+}
+
+.material {
+    font-family: 'Raleway', sans-serif;
+    font-style: italic;
+    font-size: 0.8rem;
+    border: 2px solid white;
+    border-top: none;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+    color: white;
+    box-shadow: inset 0px 0px 20px -3px rgba(255, 255, 255, 0.3);
+    border-right: none;
+    border-left: none;
+}
+
+.mB {
+    border: 2px solid #3e4140;
+    border-top: none;
+    color: #3e4140;
+    box-shadow: inset 0px 0px 20px -3px rgba(0, 0, 0, 0.4);
+    border-right: none;
+    border-left: none;
+}
+
+.g {
+    height: 0;
+    width: 0;
+}
+
+.sep {
+    height: 60px;
+}
+
+.sep1 {
+    margin-right: -12px;
+}
+
+.sep2 {
+    margin-left: -12px;
+}
+
+.visor {
+    display: flex;
+    width: 40%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.test {
+    font-size: 72px;
+    background: -webkit-linear-gradient(red 49%, blue 50%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.captured {
+    width: 40%;
+    height: 40px;
+    display:flex;
+    align-items:center;
+    justify-content: center;
+    gap: -20px;
+}
+
+.white-captured {
+    margin-left: -20px;
+}
+.black-captured {
+    margin-right: -20px;
+}
+
+.uninitiated {
+    height: 50vh;
+    width: 100%;
+    position: absolute;
+    z-index: 200;
+    background-color: gray;
+    display:flex;
+}
+
+
+#uniTop {
+    align-items: flex-end;
+}
+
+#uniBot {
+    align-items: flex-start;
+    justify-content: center;
+}
+
+#startBtn {
+    padding: 2px;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 10px;
+    color: #3e4140;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: 3px;
+    cursor:auto;
+}
+
+.st-sm {
+    font-size: 7px;
+    letter-spacing: 0;
+    font-style: italic;
+    margin: 0;
+    margin-top: -50px;
+    color:rgb(0, 0, 0, 0.4);
+    font-weight: 700;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.st-tx {
+    margin:0;
+    cursor: pointer;
+    padding-right: 30px;
+    padding-left: 30px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.aniTop {
+    animation-name: animTop;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+.aniBot {
+    overflow:hidden;
+    transition-duration: 1s;
+    animation-name: animBot;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+
+.diss {
+    animation-name: diss;
+    animation-duration: 2s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 1;
+    animation-timing-function: ease-in-out;
+}
+
+@keyframes diss {
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes animTop {
+    to {
+        margin-top: calc(-50vh + 70px);
+    }
+}
+
+@keyframes animBot {
+    to {
+        height: 70px;
+    }
+}
+
+.bot-wrap {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    z-index: 300;
+    display: flex;
+    align-items: flex-end;
+}
+
+.adit-set {
+    position: absolute;
+    z-index: 600;
+    font-size: 9px;
+    margin-top: 65px;
+    color: #545655;
+    cursor: pointer;
+}
+
+#adit-set {
+    display: none;
+    position: absolute;
+    z-index: 700;
+    padding: 10px;
+    margin-top: 75px;
+    color:rgba(0, 0, 0, 0.3);
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+#adit-set > input {
+    font-family: 'Raleway', sans-serif;
+    border-radius: 4px;
+}
+
+.dark, .light {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+.dark {
+    background-color: #E5C299;
+}
+
+
