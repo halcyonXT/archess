@@ -276,6 +276,7 @@ body {
 #adit-set > input {
     font-family: 'Raleway', sans-serif;
     border-radius: 4px;
+    width: 40px;
 }
 
 .dark, .light {
