@@ -9,10 +9,12 @@ import capture1 from './assets/capture1.mp3'
 import capture2 from './assets/capture2.mp3'
 import capture3 from './assets/capture3.mp3'
 import archess from '/archess.png'
+import archessC from '/archesscontrast.png'
 import bspng from '/bs.png'
 import wspng from '/ws.png'
 
 let pawnsqrs = [8,9,10,11,12,13,14,15,55,54,53,52,51,50,49,48]
+const removeElement = (nums, val) => nums.filter((item) => item != val)
 function tableTemplate() {
     let outp = []
     for (let i=0; i < 64; i++) {
@@ -127,7 +129,7 @@ function playSound(type) {
             return
     }
 }
-
+// ADD CUSTOM THEMES
 function App() {
     let promsqrs = [[0,1,2,3,4,5,6,7],[56,57,58,59,60,61,62,63]]//SQUARES FOR PROMOTION
     /* TIMER STUFF */
@@ -142,7 +144,23 @@ function App() {
     })
     const [flipper, setFlipper] = React.useState(true)
     let wi
-    React.useEffect(() => {
+    React.useEffect(() => {//HAS
+        if (kings.white.checked) {
+            setKings(prev => {
+                let outp = {...prev}
+                outp.white.mated = isMate('white')
+                if (outp.white.mated) {setWinner('black')} 
+                return outp
+            })
+        }
+        if (kings.black.checked) {
+            setKings(prev => {
+                let outp = {...prev}
+                outp.black.mated = isMate('black')
+                if (outp.black.mated) {setWinner('white')} 
+                return outp
+            })
+        }
         switch (turn) {
             case 'white':
                 setDef({
@@ -156,6 +174,12 @@ function App() {
                     black: 1000
                 })
                 break
+        }
+        if (kings.black.mated || kings.white.mated || winner != 'none') {
+            setDef(({
+                white:0,
+                black:0
+            }))
         }
     }, [turn])
 
@@ -194,12 +218,14 @@ function App() {
         black: {
             pos: 4,
             moved: false,
-            checked: false
+            checked: false,
+            mated: false
         },
         white: {
             pos: 60,
             moved: false,
-            checked: false
+            checked: false,
+            mated: false
         }
     })
     const [captured, setCaptured] = React.useState({
@@ -220,7 +246,6 @@ function App() {
         wp = wp.flat()
         bp = bp.flat()
         if (wp.includes(kings.black.pos)) {//black checked
-            console.log("blk checke")
             setKings(prevState => {
                 let outp = {...prevState}
                 outp.black.checked = true
@@ -228,7 +253,6 @@ function App() {
             })
         }
         if (bp.includes(kings.white.pos)) {//white checked
-            console.log("white checke")
             setKings(prevState => {
                 let outp = {...prevState}
                 outp.white.checked = true
@@ -250,6 +274,42 @@ function App() {
             })
         }
     }, [cells])
+
+    const isMate = (side) => {//cheking if check is checkmate
+        let squares = []
+        let outp = []
+        let king = []
+        switch (side){
+            case 'white':
+                squares = kingFilter(0, 'black', true, false, true)
+                for (let square in squares) {
+                    if (square != -1) {
+                        outp.push(validate(squares[square], 'white'))
+                    }
+                }
+                king = kingCheck(kings.white.pos)
+                king = kingFilter([...king], 'white', false, false, true)
+                outp = removeElement(outp, kings.white.pos)
+                break
+            case 'black':
+                squares = kingFilter(0, 'white', true, false, true)
+                for (let square in squares) {
+                    if (square != -1) {
+                        outp.push(validate(squares[square], 'black'))
+                    }
+                }
+                king = kingCheck(kings.black.pos)
+                king = kingFilter([...king], 'black', false, false, true)
+                outp = removeElement(outp, kings.black.pos)
+                break
+        }
+        outp = removeElement(outp, -1)
+        outp = removeElement(outp, undefined)
+        /*console.log(outp)
+        console.log(king)*/
+        if (outp.length === 0 && king.length === 0) {return true} else return false
+    }
+
 
     React.useEffect(() => { //TELLS WHOSE TURN IT IS
         switch (move % 2 == 0) {
@@ -385,7 +445,7 @@ function App() {
         return outp
     }
     //FILTERS OUT SQUARES WHERE KING CANNOT MOVE
-    const kingFilter = (arr, side, ch = false, alt = false) => {
+    const kingFilter = (arr, side, ch = false, alt = false, mate = false) => {
         let held = []
         let outp = []
         if (alt != false) {
@@ -447,10 +507,18 @@ function App() {
                                 oper = 1
                                 break
                         }
-                        pusher = [
-                            cells.findIndex(el => el.X == cell.X + 1 && el.Y == cell.Y + oper),
-                            cells.findIndex(el => el.X == cell.X - 1 && el.Y == cell.Y + oper)
-                        ]
+                        if (!mate) {
+                            pusher = [
+                                cells.findIndex(el => el.X == cell.X + 1 && el.Y == cell.Y + oper),
+                                cells.findIndex(el => el.X == cell.X - 1 && el.Y == cell.Y + oper)
+                            ]
+                        } else {
+                            pusher = [
+                                cells.findIndex(el => el.X == cell.X && el.Y == cell.Y + oper && el.side == 'none'),
+                                cells.findIndex(el => el.X == cell.X + 1 && el.Y == cell.Y + oper && el.side == side),
+                                cells.findIndex(el => el.X == cell.X - 1 && el.Y == cell.Y + oper && el.side == side)
+                            ]
+                        }
                         held.push(pusher)
                         break;
                     case 'knight':
@@ -477,8 +545,10 @@ function App() {
                         held.push(pusher)
                         break;
                     case 'king':
-                        squares = kingCheck(cell.id)
-                        held.push(squares)
+                        if (mate) {} else {
+                            squares = kingCheck(cell.id, true)
+                            held.push(squares)
+                        }
                         break;
                     default:
                         break;
@@ -489,12 +559,14 @@ function App() {
         if (ch) {return held}
         for (let item of arr) {
             if (held.includes(item)) {
+                if (!mate) {
                 setCells(prevState => {
                     let output = [...prevState]
                     output[item].selected = false
                     return output
                 })
                 continue
+                }
             } else {
                 outp.push(item)
             }
@@ -502,7 +574,7 @@ function App() {
         return outp
     }
     //GIVES BACK VIABLE SQUARES FOR KING MOVEMENT
-    const kingCheck = (id) => {
+    const kingCheck = (id, other = false) => {
         let outp=[]
         for (let item of cells) {
             let temp = cells[id]
@@ -510,6 +582,8 @@ function App() {
                 || item.X == temp.X - 1 && (item.Y == temp.Y || item.Y == temp.Y+1 || item.Y == temp.Y-1)
                 || item.X == temp.X && (item.Y == temp.Y+1 || item.Y == temp.Y-1) )) {
                     if (item.side != temp.side ) {
+                        outp.push(item.id)
+                    } else if (other) {
                         outp.push(item.id)
                     }
                 }
@@ -570,31 +644,50 @@ function App() {
         if (!kings.black.moved 
             && selected != -1
             && cells[selected].piece === 'king'
-            && cells[selected].side === 'black') {
+            && cells[selected].side === 'black'
+            && !kings.black.checked) {
                 switch (id) {
                     case 2:
-                        setAllowed([])
-                        setCells(prev => {
-                            let outp = [...prev]
-                            outp[2].piece = 'king'
-                            outp[2].side = 'black'
-                            outp[3].piece = 'rook'
-                            outp[3].side = 'black'
-                            outp[4].piece = 'none'
-                            outp[4].side = 'none'
-                            outp[0].piece = 'none'
-                            outp[0].side = 'none'
-                            return outp
-                        })
-                        setMove(prevState => prevState + 1)
-                        flushSelected()
+                        if (cells[1].piece == 'none' && cells[2].piece == 'none' && cells[3].piece == 'none') {
+                            setAllowed([])
+                            setCells(prev => {
+                                let outp = [...prev]
+                                outp[2].piece = 'king'
+                                outp[2].side = 'black'
+                                setKings(prev => {
+                                    let outp = {...prev}
+                                    outp.black.pos = 2
+                                    outp.black.moved = true
+                                    return outp 
+                                })
+                                outp[3].piece = 'rook'
+                                outp[3].side = 'black'
+                                outp[4].piece = 'none'
+                                outp[4].side = 'none'
+                                outp[0].piece = 'none'
+                                outp[0].side = 'none'
+                                return outp
+                            })
+                            setMove(prevState => prevState + 1)
+                            playSound('move')
+                            flushSelected()
                         return
+                        }
+                        break
                     case 6:
+                        if (cells[5].piece == 'none' && cells[6].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
                             let outp = [...prev]
                             outp[6].piece = 'king'
                             outp[6].side = 'black'
+                            setKings(prev => {
+                                let outp = {...prev}
+                                outp.black.pos = 6
+                                outp.black.moved = true
+                                playSound('move')
+                                return outp 
+                            })
                             outp[5].piece = 'rook'
                             outp[5].side = 'black'
                             outp[4].piece = 'none'
@@ -606,6 +699,8 @@ function App() {
                         setMove(prevState => prevState + 1)
                         flushSelected()
                         return
+                    }
+                    break
                     default:
                         break
                 }
@@ -613,14 +708,23 @@ function App() {
         if (!kings.white.moved 
             && selected != -1
             && cells[selected].piece === 'king'
-            && cells[selected].side === 'white') {
+            && cells[selected].side === 'white'
+            && !kings.black.checked) {
                 switch (id) {
                     case 58:
+                        if (cells[57].piece == 'none' && cells[58].piece == 'none' && cells[59].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
                             let outp = [...prev]
                             outp[58].piece = 'king'
                             outp[58].side = 'white'
+                            setKings(prev => {
+                                let outp = {...prev}
+                                outp.white.pos = 58
+                                outp.white.moved = true
+                                playSound('move')
+                                return outp 
+                            })
                             outp[59].piece = 'rook'
                             outp[59].side = 'white'
                             outp[60].piece = 'none'
@@ -632,12 +736,22 @@ function App() {
                         setMove(prevState => prevState + 1)
                         flushSelected()
                         return
+                    }
+                    break
                     case 62:
+                        if (cells[61].piece == 'none' && cells[62].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
                             let outp = [...prev]
                             outp[62].piece = 'king'
                             outp[62].side = 'white'
+                            setKings(prev => {
+                                let outp = {...prev}
+                                outp.white.pos = 62
+                                outp.white.moved = true
+                                playSound('move')
+                                return outp 
+                            })
                             outp[61].piece = 'rook'
                             outp[61].side = 'white'
                             outp[60].piece = 'none'
@@ -649,6 +763,8 @@ function App() {
                         setMove(prevState => prevState + 1)
                         flushSelected()
                         return
+                    }
+                    break
                     default:
                         break
                 }
@@ -787,7 +903,7 @@ function App() {
         if (cells[id].side != turn) {//IF NOT x PLAYERS TURN, RETURN
             return
         }
-        switch(cells[id].piece) {
+        switch(cells[id].piece) {//MAIN
             case 'pawn':
                 flushSelected()
                 let oper = 0
@@ -1057,37 +1173,53 @@ function App() {
             default:
                 return
         }
-        if (kings.white.checked) {
-            if (cells[id].side === 'white') {
-                if (cells[id].piece === 'king') {return}
-                for (let item in allow) {
-                    allow[item] = validate(allow[item], 'white')
-                }
-                setAllowed(allow)
+        if (cells[id].side === 'white') {
+            if (cells[id].piece === 'king') {return}
+            for (let item in allow) {
+                allow[item] = validate(allow[item], 'white', id)
+            }
+            setAllowed(allow)
+        }
+
+        if (cells[id].side === 'black') {
+            if (cells[id].piece === 'king') {return}
+            for (let item in allow) {
+                allow[item] = validate(allow[item], 'black', id)
+            }
+            setAllowed(allow)
+        }
+        /*if (cells[id].side === 'black') {
+            if (isDangerous(id, 'black')) {
+                setAllowed([])
             }
         }
-        if (kings.black.checked) {
-            if (cells[id].side === 'black') {
-                if (cells[id].piece === 'king') {return}
-                for (let item in allow) {
-                    allow[item] = validate(allow[item], 'black')
-                }
-                setAllowed(allow)
+        if (cells[id].side === 'white') {
+            if (isDangerous(id, 'white')) {
+                setAllowed([])
             }
-        }
+        }*/
     }
-    
-    const validate = (target, player) => {
+
+    const validate = (target, player, from) => {
+        if (target === -1) {return}
         let pg = [...cells], squares = []
         let bp = pg[target].piece, bs = pg[target].side
+        if (from === undefined) {
+            from = 0
+        }
+        let mp = pg[from].piece, ms = pg[from].side
         switch (player) {
             case 'white':
                 pg[target].piece = 'pawn'
                 pg[target].side = 'white'
+                pg[from].piece = 'none'
+                pg[from].side = 'none'
                 squares = kingFilter(0, 'white', true, pg)
                 if (squares.includes(kings.white.pos)) {
                     pg[target].piece = bp
                     pg[target].side = bs
+                    pg[from].piece = mp
+                    pg[from].side = ms
                     setCells(prev => {
                         let outp = [...prev]
                         outp[target].selected = false
@@ -1097,16 +1229,22 @@ function App() {
                 } else {
                     pg[target].piece = bp
                     pg[target].side = bs
+                    pg[from].piece = mp
+                    pg[from].side = ms
                     return target
                 }
                 break;
             case 'black':
                 pg[target].piece = 'pawn'
                 pg[target].side = 'black'
+                pg[from].piece = 'none'
+                pg[from].side = 'none'
                 squares = kingFilter(0, 'black', true, pg)
                 if (squares.includes(kings.black.pos)) {
                     pg[target].piece = bp
                     pg[target].side = bs
+                    pg[from].piece = mp
+                    pg[from].side = ms
                     setCells(prev => {
                         let outp = [...prev]
                         outp[target].selected = false
@@ -1116,6 +1254,8 @@ function App() {
                 } else {
                     pg[target].piece = bp
                     pg[target].side = bs
+                    pg[from].piece = mp
+                    pg[from].side = ms
                     return target
                 }
                 break;
@@ -1146,6 +1286,7 @@ function App() {
         document.getElementById("startBtn").classList.add("diss")
         document.getElementById("adit-set").classList.add("diss")
         document.getElementById("adit").classList.add("diss")
+        document.getElementById("theme").classList.add("diss")
         setTimeout(() => {
             document.getElementById("uniBot").style.opacity = '0'
             setTimeout(() => {
@@ -1159,10 +1300,13 @@ function App() {
     function triggerSett() {
         //ADDITIONAL SETTINGS
         setToggle(prev => !prev)
-        toggle ?
-        document.getElementById('adit-set').style.display = 'block'
-        :
-        document.getElementById('adit-set').style.display = 'none'
+        if (toggle) {
+            document.getElementById('adit-set').style.display = 'block'
+            document.getElementById('theme').style.display = 'block'
+        } else {
+            document.getElementById('adit-set').style.display = 'none'
+            document.getElementById('theme').style.display = 'none'
+        }
     }
 
     function handleSett() {
@@ -1176,6 +1320,73 @@ function App() {
         }
     }
 
+    let [theme, setTheme] = React.useState('classic')
+
+    function handleTheme() {
+        let theme = document.getElementById('themeS').value
+        if (theme == 'custom') {
+            document.getElementById('custom-theme').style.display = 'flex'
+            document.documentElement.style.setProperty('--settings', `#${custom.settings}`);
+            document.documentElement.style.setProperty('--accent', `#${custom.accent}`);
+            document.documentElement.style.setProperty('--main', `#${custom.main}`);
+            document.documentElement.style.setProperty('--darkcell', `#${custom.darkcell}`);
+            return
+        }
+        document.getElementById('custom-theme').style.display = 'none'
+        switch (theme) {
+            case 'classic':
+                setTheme('classic')
+                document.documentElement.style.setProperty('--settings', '#545655');
+                document.documentElement.style.setProperty('--accent', 'gray');
+                document.documentElement.style.setProperty('--main', '#E5C299');
+                document.documentElement.style.setProperty('--black', '#3e4140');
+                document.documentElement.style.setProperty('--darkcell', '#E5C299');
+                break
+            case 'contrasted':
+                setTheme('contrasted')
+                document.documentElement.style.setProperty('--settings', 'white');
+                document.documentElement.style.setProperty('--accent', 'black');
+                document.documentElement.style.setProperty('--main', 'white');
+                document.documentElement.style.setProperty('--black', '#3e4140');
+                document.documentElement.style.setProperty('--darkcell', '#E5C299');
+                break
+            case 'mahogany':
+                setTheme('classic')//#BD9B6D
+                document.documentElement.style.setProperty('--settings', '#545655');
+                document.documentElement.style.setProperty('--accent', '#DDC3A2');
+                document.documentElement.style.setProperty('--main', '#F7F8E8');
+                document.documentElement.style.setProperty('--black', '#3e4140');
+                document.documentElement.style.setProperty('--darkcell', '#E5C299');
+                break
+            case 'lightcontrasted':
+                setTheme('lcontrast')
+                document.documentElement.style.setProperty('--settings', '#A1A1A1');
+                document.documentElement.style.setProperty('--accent', '#454545');
+                document.documentElement.style.setProperty('--main', 'rgb(39, 39, 39)');
+                document.documentElement.style.setProperty('--black', 'white');
+                document.documentElement.style.setProperty('--darkcell', '#008B8B');
+                break
+        }
+    }
+
+    let [custom, setCustom] = React.useState({
+        darkcell: localStorage.getItem('darkcell') || '3e4140',
+        settings: localStorage.getItem('settings') || '545655',
+        main: localStorage.getItem('main') || 'E5C299',
+        accent: localStorage.getItem('accent') || '808080'
+    })
+
+
+    function handleCustom(ev, el) {
+        setCustom(prev => {
+            let outp = {...prev}
+            outp[el] = ev.target.value
+            document.documentElement.style.setProperty(`--${el}`, `#${ev.target.value}`);
+            localStorage.setItem(`${el}`, ev.target.value)
+            return outp
+        })
+    }
+
     return (
         <div>
             {
@@ -1183,7 +1394,7 @@ function App() {
                 <div>
                     <div className='uninitiated' id="uniTop">
                         <div className="logo">
-                            <img src={archess}/>
+                            <img src={theme === 'classic' && archess || theme === 'contrasted' && archessC || theme === 'lcontrast' && archessC}/>
                         </div>
                     </div>
                     <div className='bot-wrap'>
@@ -1193,17 +1404,40 @@ function App() {
                                 <br/><h6 className='st-sm' id='smtxt' onClick={triggerAnim}>REGULAR 10 MINUTE</h6>
                             </button>
                             <p className='adit-set' id='adit' onClick={triggerSett}><u>Additional settings</u></p>
-                            <div id='adit-set'>Time in minutes: <input type='text' onInput={handleSett} id='tinput'></input></div>
+                            <div id='adit-set'><span className='genText'>Time in minutes:</span> <input type='text' onInput={handleSett} id='tinput'></input></div>
+                            <div id='theme'>
+                                <span className='genText'>Theme:</span> <select id='themeS' onChange={() => handleTheme()}>
+                                    <option value='classic'>Classic</option>
+                                    <option value='contrasted'>Contrasted</option>
+                                    <option value='lightcontrasted'>Contrast Lite</option>
+                                    <option value='mahogany'>Mahogany</option>
+                                    <option value='custom'>Custom</option>
+                                </select>
+                            </div>
+                            <div id='custom-theme'>
+                                <input type='text' placeholder="Black cells (Hex)" id='-darkcell'
+                                onInput={(event) => handleCustom(event,'darkcell')}
+                                />
+                                <input type='text' placeholder="Settings (Hex)" id='-settings'
+                                onInput={(event) => handleCustom(event,'settings')}
+                                />
+                                <input type='text' placeholder="Main (Hex)" id='-main'
+                                onInput={(event) => handleCustom(event,'main')}
+                                />
+                                <input type='text' placeholder="Accent (Hex)" id='-accent'
+                                onInput={(event) => handleCustom(event,'accent')}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
             }
             <div className="logo">
-                <img src={archess} />
+                <img src={theme === 'classic' && archess || theme === 'contrasted' && archessC || theme === 'lcontrast' && archessC} />
             </div>
             <div className="footer-wrapper">
                 <div className="footer">
-                    <div style={{display: 'flex', alignItems:'center'}}>
+                    <div style={{display: 'flex', alignItems:'center', justifyContent: 'left'}}>
                         <img className='sep sep1' src={wspng}/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerW'>White | {dispWT}</h1>
@@ -1211,14 +1445,14 @@ function App() {
                         </div>
                         <img className='sep sep2' src={wspng}/>
                     </div>
-                    <Eval captured={captured} winner={winner}/>
-                    <div style={{display: 'flex', alignItems:'center'}}>
-                        <img className='sep sep1' src={bspng}/>
+                    <Eval captured={captured} winner={winner} kings={kings}/>
+                    <div style={{display: 'flex', alignItems:'center', justifyContent: 'right'}}>
+                        <img className='sep sep1' src={theme === 'lcontrast' ? wspng : bspng}/>
                         <div style={{display:'block', textAlign:'center'}}>
                             <h1 className='timer timerB'>Black | {dispBT}</h1>
                             <h6 className="material mB">Points captured: {captured.black.points}</h6>
                         </div>
-                        <img className='sep sep2' src={bspng}/>
+                        <img className='sep sep2' src={theme === 'lcontrast' ? wspng : bspng}/>
                     </div>
                 </div>
             </div>

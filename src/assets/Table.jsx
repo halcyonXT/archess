@@ -13,24 +13,29 @@ import whiterook from '/whiterook.png'
 import whitepawn from '/whitepawn.png'
 
 export default function Table(props) {
-
     const getStyles = (id, white = false) => {
         let styles = {}
         if (id == props.selected) {
             styles.filter = 'brightness(85%)'
         }
         if (props.cells[id].selected) {
-            styles.boxShadow = 'inset 0px 0px 15px -3px rgba(0, 0, 0, 0.7)'
+            styles.boxShadow = 'inset 0px 0px 1.1792vw 0px rgba(0, 0, 0, 0.7)'
         }
         if (white) {styles.backgroundColor = 'white'}
         if (id === props.kings.white.pos) {
             if (props.kings.white.checked){
-                styles.boxShadow = 'inset 0px 0px 20px -3px rgba(255, 0, 0, 0.8)'
+                styles.boxShadow = 'inset 0px 0px 1.5723vw 0px rgba(255, 0, 0, 0.8)'
+            }
+            if (props.kings.white.mated){
+                styles.boxShadow = 'inset 0px 0px 1.5723vw 0px rgba(0, 0, 255, 0.8)'
             }
         }
         if (id === props.kings.black.pos) {
             if (props.kings.black.checked){
-                styles.boxShadow = 'inset 0px 0px 20px -3px rgba(255, 0, 0, 0.8)'
+                styles.boxShadow = 'inset 0px 0px 1.5723vw 0px rgba(255, 0, 0, 0.8)'
+            }
+            if (props.kings.black.mated){
+                styles.boxShadow = 'inset 0px 0px 1.5723vw 0px rgba(0, 0, 255, 0.8)'
             }
         }
         return styles

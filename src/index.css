@@ -2,8 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --settings: #545655;
+    --black: #3e4140;  
+    --accent: gray;
+    --main: #E5C299; 
+    --darkcell: #E5C299
+}
+/*--settings: #545655;
+    --black: #3e4140;  
+    --accent: gray;
+    --main: #E5C299;*/
 body {
-    background-color: #E5C299;
+    background-color: var(--main);
     font-family: 'Raleway', sans-serif;
     overflow: hidden;
 }
@@ -17,16 +28,16 @@ body {
 }
 
 .mainframe {
-    border-radius: 2px;
-    border: 2px solid #fed7aa;
-    outline: 6px double #3e4140;
-    box-shadow: white 4px 0px 0px, white 0px 4px 0px, white 4px 4px 0px, white -4px 0px 0px, white 0px -4px 0px, white -4px -4px 0px, white -4px 4px 0px, white 4px -4px 0px
+    border-radius: 0.1572vw;
+    border: 0.1572vw solid var(--main);
+    outline: 0.4717vw double #3e4140;
+    box-shadow: white 0.3145vw 0px 0px, white 0px 0.3145vw 0px, white 0.3145vw 0.3145vw 0px, white -0.3145vw 0px 0px, white 0px -0.3145vw 0px, white -0.3145vw -0.3145vw 0px, white -0.3145vw 0.3145vw 0px, white 0.3145vw -0.3145vw 0px
 }
 
 .imgsettings {
     user-select: none;
     -webkit-user-drag: none;
-    height: 3rem;
+    height: 3.9736vw;
 }
 
 .logo {
@@ -35,8 +46,8 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 70px;
-    background-color: gray;
+    height: 5.5031vw;
+    background-color: var(--accent);
 }
 .logo > img {pointer-events: none; user-select: none; -webkit-user-drag: none;}
 
@@ -44,9 +55,9 @@ body {
     position: absolute;
     z-index: 21;
     width: 100%;
-    height: 70px;
-    background-color: gray;
-    margin-top: calc(100vh - 70px);
+    height: 5.5031vw;
+    background-color: var(--accent);
+    margin-top: calc(100vh - 5.5031vw);
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -54,14 +65,14 @@ body {
 
 .timer {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 1.8868vw;
     color: white;
     margin: 0;
-    border: 2px solid white;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 4px;
-    box-shadow: inset 0px 0px 20px -3px rgba(255, 255, 255, 0.4);
+    border: 0.1572vw solid white;
+    padding-left: 0.7862vw;
+    padding-right: 0.7862vw;
+    border-radius:0.3145vw;
+    box-shadow: inset 0px 0px 1.5723vw -3px rgba(255, 255, 255, 0.4);
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
     border-right: none;
@@ -69,9 +80,9 @@ body {
 }
 
 .timerB {
-    color: #3e4140;
-    border: 2px solid #3e4140;
-    box-shadow: inset 0px 0px 20px -3px rgba(0, 0, 0, 0.4);
+    color: var(--black);
+    border: 0.1572vw solid var(--black);
+    box-shadow: inset 0px 0px 1.5723vw -3px var(--black);
     border-right: none;
     border-left: none;
 }
@@ -79,23 +90,23 @@ body {
 .material {
     font-family: 'Raleway', sans-serif;
     font-style: italic;
-    font-size: 0.8rem;
-    border: 2px solid white;
+    font-size: 1.0063vw;
+    border: 0.1572vw solid white;
     border-top: none;
-    border-radius: 4px;
+    border-radius: 0.3145vw;
     border-top-right-radius: 0;
     border-top-left-radius: 0;
     color: white;
-    box-shadow: inset 0px 0px 20px -3px rgba(255, 255, 255, 0.3);
+    box-shadow: inset 0px 0px 1.5723vw -3px rgba(255, 255, 255, 0.3);
     border-right: none;
     border-left: none;
 }
 
 .mB {
-    border: 2px solid #3e4140;
+    border: 0.1572vw solid var(--black);
     border-top: none;
-    color: #3e4140;
-    box-shadow: inset 0px 0px 20px -3px rgba(0, 0, 0, 0.4);
+    color: var(--black);
+    box-shadow: inset 0px 0px 1.5723vw -3px var(--black);
     border-right: none;
     border-left: none;
 }
@@ -106,15 +117,15 @@ body {
 }
 
 .sep {
-    height: 60px;
+    height: 4.717vw;
 }
 
 .sep1 {
-    margin-right: -12px;
+    margin-right: -0.9434vw;
 }
 
 .sep2 {
-    margin-left: -12px;
+    margin-left: -0.9434vw;
 }
 
 .visor {
@@ -124,27 +135,22 @@ body {
     align-items: center;
 }
 
-.test {
-    font-size: 72px;
-    background: -webkit-linear-gradient(red 49%, blue 50%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
+
 
 .captured {
     width: 40%;
-    height: 40px;
+    height: 3.1447vw;
     display:flex;
     align-items:center;
     justify-content: center;
-    gap: -20px;
+    gap: -1.5723vw;
 }
 
 .white-captured {
-    margin-left: -20px;
+    margin-left: -1.5723vw;
 }
 .black-captured {
-    margin-right: -20px;
+    margin-right: -1.5723vw;
 }
 
 .uninitiated {
@@ -152,7 +158,7 @@ body {
     width: 100%;
     position: absolute;
     z-index: 200;
-    background-color: gray;
+    background-color: var(--accent);
     display:flex;
 }
 
@@ -167,24 +173,24 @@ body {
 }
 
 #startBtn {
-    padding: 2px;
+    padding: 0.1572vw;
     background-color: white;
-    border-radius: 20px;
-    margin-top: 10px;
+    border-radius: 1.5723vw;
+    margin-top: 0.7862vw;
     color: #3e4140;
     font-family: 'Raleway', sans-serif;
     font-weight: 600;
-    font-size: 28px;
-    letter-spacing: 3px;
+    font-size: 2.2013vw;
+    letter-spacing: 0.2358vw;
     cursor:auto;
 }
 
 .st-sm {
-    font-size: 7px;
+    font-size: 0.5503vw;
     letter-spacing: 0;
     font-style: italic;
     margin: 0;
-    margin-top: -50px;
+    margin-top: -3.9308vw;
     color:rgb(0, 0, 0, 0.4);
     font-weight: 700;
     user-select: none;
@@ -194,8 +200,8 @@ body {
 .st-tx {
     margin:0;
     cursor: pointer;
-    padding-right: 30px;
-    padding-left: 30px;
+    padding-right: 2.3585vw;
+    padding-left: 2.3585vw;
     cursor: pointer;
     user-select: none;
     -webkit-user-drag: none;
@@ -234,13 +240,13 @@ body {
 
 @keyframes animTop {
     to {
-        margin-top: calc(-50vh + 70px);
+        margin-top: calc(-50vh + 5.5031vw);
     }
 }
 
 @keyframes animBot {
     to {
-        height: 70px;
+        height: 5.5031vw;
     }
 }
 
@@ -256,9 +262,9 @@ body {
 .adit-set {
     position: absolute;
     z-index: 600;
-    font-size: 9px;
-    margin-top: 65px;
-    color: #545655;
+    font-size: 0.7075vw;
+    margin-top: 5.1101vw;
+    color: var(--settings);
     cursor: pointer;
 }
 
@@ -266,26 +272,76 @@ body {
     display: none;
     position: absolute;
     z-index: 700;
-    padding: 10px;
-    margin-top: 75px;
-    color:rgba(0, 0, 0, 0.3);
+    padding: 0.7862vw;
+    margin-top: 5.8962vw;
+    color:var(--settings);
     user-select: none;
     -webkit-user-drag: none;
 }
 
 #adit-set > input {
     font-family: 'Raleway', sans-serif;
-    border-radius: 4px;
-    width: 40px;
+    border-radius: 0.3145vw;
+    width: 3.1447vw;
+    color: black;
+    text-align: center;
 }
 
 .dark, .light {
-    width: 3.5rem;
-    height: 3.5rem;
+    width: 4.4025vw;
+    height: 4.4025vw;
 }
 
 .dark {
-    background-color: #E5C299;
+    background-color: var(--darkcell);
 }
 
+#theme {
+    display: none;
+    position: absolute;
+    z-index: 244;
+    margin-top: 9.0409vw;
+    color: var(--settings);
+}
 
+#startBtn:hover {
+    box-shadow: inset 0px 0px 1.5723vw -3px rgba(0, 0, 0, 0.4);
+}
+
+#startBtn:active {
+    box-shadow: inset 0px 0px 1.5723vw -3px rgba(0, 0, 0, 0.6);
+}
+
+#themeS {
+    border-radius: 0.3145vw;
+    color:black;
+    font-size: 1.5723vw;
+}
+#themeS > select {
+    font-size: 1.5723vw;
+}
+#tinput {
+    font-size: 1.5723vw;
+}
+
+#custom-theme {
+    display: none;
+    position: absolute;
+    flex-direction: column;
+    z-index: 500;
+    gap:0.3931vw;
+    padding: 0.3931vw;
+    border: 1px solid white;
+    border-radius: 0.3931vw;
+    margin-top: 6.2893vw;
+    margin-left: 25.5849vw;
+}
+
+#custom-theme > input {
+    width: 7.8616vw;
+    font-size: 0.7862vw;
+}
+
+.genText {
+    font-size: 1.5723vw;
+}

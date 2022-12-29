@@ -19,54 +19,54 @@ export default function Eval(props) {
     let styles = {}
     styles.fontFamily = `'Staatliches', sans-serif`
     styles.letterSpacing = '2px'
-    styles.fontSize = '45px'
+    styles.fontSize = '3.5377vw'
     styles.margin = '0px'
     styles.lineHeight = 'max-content'
 
     if (diff === 0) {
-        styles.background= `-webkit-linear-gradient(white 48%, #3e4140 49%)`
+        styles.background= `-webkit-linear-gradient(white 48%, var(--black) 49%)`
         styles.WebkitBackgroundClip= 'text'
         styles.WebkitTextFillColor= 'transparent'
     } else {
         if (diff < 0) {
-            styles.color = '#3e4140'
+            styles.color = 'var(--black)'
         } else {
             styles.color = 'white'
         }
     }
-<img src="https://i.ibb.co/VMrTpqS/whitequeen.png" alt="whitequeen" border="0"></img>
+
     let dispW = props.captured.white.pieces.map(piece => {
         //return <img src={`/black${piece}.png`} style={{height:'25px', marginRight: '-2px'}}/>
         switch (piece) {
             case 'king':
-                return <img src={blackking} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackking} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'queen':
-                return <img src={blackqueen} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackqueen} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'knight':
-                return <img src={blackknight} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackknight} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'bishop':
-                return <img src={blackbishop} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackbishop} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'rook':
-                return <img src={blackrook} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackrook} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'pawn':
-                return <img src={blackpawn} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={blackpawn} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
         }
     })
     let dispB = props.captured.black.pieces.map(piece => {
         //return <img src={`/white${piece}.png`} style={{height:'25px', marginLeft: '-4px'}}/>
         switch (piece) {
             case 'king':
-                return <img src={whiteking} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whiteking} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
             case 'queen':
-                return <img src={whitequeen} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whitequeen} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
             case 'knight':
-                return <img src={whiteknight} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whiteknight} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
             case 'bishop':
-                return <img src={whitebishop} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whitebishop} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
             case 'rook':
-                return <img src={whiterook} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whiterook} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
             case 'pawn':
-                return <img src={whitepawn} style={{height:'25px', marginRight: '-2px'}}/>
+                return <img src={whitepawn} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
         }
     })
     diff = diff <= 0 ? diff : `+${diff}`
@@ -76,22 +76,24 @@ export default function Eval(props) {
         switch(props.winner) {
             case 'black':
                 styles.color = '#3e4140'
-                styles.textShadow = '#3e4140 0px 0px 10px'
-                diff = `BLACK WON ON TIME`
+                styles.textShadow = '#3e4140 0px 0px 0.7862vw'
+                diff = props.kings.white.mated ? 'CHECKMATE' : `BLACK WON ON TIME`
                 styles.width = '800px'
                 dispW = null
                 dispB = null
                 break
             case 'white':
                 styles.color = '#FFFFFF'
-                styles.textShadow = 'white 0px 0px 10px'
-                diff = `WHITE WON ON TIME`
+                styles.textShadow = 'white 0px 0px 0.7862vw'
+                diff = props.kings.black.mated ? 'CHECKMATE' : `WHITE WON ON TIME`
                 styles.width = '800px'
                 dispW = null
                 dispB = null
                 break
         }
     }
+
+
 
     return (
         <div className='visor'>
