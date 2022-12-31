@@ -8,10 +8,12 @@ import move3 from './assets/move3.mp3'
 import capture1 from './assets/capture1.mp3'
 import capture2 from './assets/capture2.mp3'
 import capture3 from './assets/capture3.mp3'
+import check from './assets/check.mp3'
 import archess from '/archess.png'
 import archessC from '/archesscontrast.png'
 import bspng from '/bs.png'
 import wspng from '/ws.png'
+import MoveBar from './assets/MoveBar.jsx'
 
 let pawnsqrs = [8,9,10,11,12,13,14,15,55,54,53,52,51,50,49,48]
 const removeElement = (nums, val) => nums.filter((item) => item != val)
@@ -99,6 +101,9 @@ function tableTemplate() {
 function playSound(type) {
     let rnd
     switch(type) {
+        case 'check':
+            new Audio(check).play()
+            break
         case 'move':
             rnd = Math.ceil(Math.random() * 3)
             switch (rnd) {
@@ -131,6 +136,7 @@ function playSound(type) {
 }
 // ADD CUSTOM THEMES
 function App() {
+    const [memory, setMemory] = React.useState([])
     let promsqrs = [[0,1,2,3,4,5,6,7],[56,57,58,59,60,61,62,63]]//SQUARES FOR PROMOTION
     /* TIMER STUFF */
     const [timers, setTimers] = React.useState({
@@ -181,6 +187,16 @@ function App() {
                 black:0
             }))
         }
+        setMemory(prev => {
+            let outp = [...prev]
+            let pusher = []
+            for (let cell of cells) {
+                pusher.push(cell)
+            }
+            outp.push(pusher)
+            return outp
+        })
+        console.log(memory)
     }, [turn])
 
     React.useEffect(() => {
@@ -207,13 +223,16 @@ function App() {
     /*************/
 
 
-
+    /***** END RESULT STUFF *****/
+    const [moves, setMoves] = React.useState([])
+    /****************************/
 
     const [initiated, setInitiated] = React.useState(false)
     const [cells, setCells] = React.useState(tableTemplate())
     const [allowed, setAllowed] = React.useState([])
     const [selected, setSelected] = React.useState(-1)
     const [move, setMove] = React.useState(1)
+    const [castled, setCastled] = React.useState(false)
     const [kings, setKings] = React.useState({
         black: {
             pos: 4,
@@ -256,9 +275,13 @@ function App() {
             setKings(prevState => {
                 let outp = {...prevState}
                 outp.white.checked = true
+
                 return outp
             })
+
         }
+        
+
         if (!wp.includes(kings.black.pos)) {
             setKings(prevState => {
                 let outp = {...prevState}
@@ -273,6 +296,8 @@ function App() {
                 return outp
             })
         }
+
+        eotSound()
     }, [cells])
 
     const isMate = (side) => {//cheking if check is checkmate
@@ -310,6 +335,25 @@ function App() {
         if (outp.length === 0 && king.length === 0) {return true} else return false
     }
 
+    function eotSound() {
+        switch (whichSound) {
+            case 1:
+                playSound("move")
+                setWhichSound("0")
+                break
+                case 2:
+                if (kings.white.checked || kings.black.checked) {
+                    playSound("move")
+                    setWhichSound("0")
+                } else {
+                    playSound("move")
+                    setWhichSound("0")
+                }
+                    break
+            default:
+                break
+        }
+    }
 
     React.useEffect(() => { //TELLS WHOSE TURN IT IS
         switch (move % 2 == 0) {
@@ -573,6 +617,8 @@ function App() {
         }
         return outp
     }
+
+    const used = () => setCastled(false)
     //GIVES BACK VIABLE SQUARES FOR KING MOVEMENT
     const kingCheck = (id, other = false) => {
         let outp=[]
@@ -590,11 +636,12 @@ function App() {
         }
         return outp
     }
-
+    const [whichSound,setWhichSound] = React.useState(0)
     function handleSelect(id) {
         if (winner != 'none') {return}
         let squares, allow = []
         let turn = move % 2 == 0 ? "black" : "white"
+        
         //TWO STATEMENTS BELOW CHECK IF MOVE IS PAWN PROMOTION
         if (selected != -1
             && cells[selected].piece === 'pawn'
@@ -648,6 +695,7 @@ function App() {
             && !kings.black.checked) {
                 switch (id) {
                     case 2:
+                        setCastled(1)
                         if (cells[1].piece == 'none' && cells[2].piece == 'none' && cells[3].piece == 'none') {
                             setAllowed([])
                             setCells(prev => {
@@ -669,12 +717,34 @@ function App() {
                                 return outp
                             })
                             setMove(prevState => prevState + 1)
+                            setMoves(prev => {
+                            let outp = [...prev]
+                            let obj = {}
+                            obj.from = {}
+                            obj.to = {}
+                            if (selected == -1) {
+                                obj.from.piece = 'none'
+                                obj.from.X = 'none'
+                                obj.from.Y = 'none'
+                            } else {
+                                obj.from.piece = 'king'
+                                obj.from.X = cells[selected].X
+                                obj.from.Y = cells[selected].Y
+                                obj.from.color = cells[selected].side
+                            }
+                            obj.to.piece = '2'
+                            obj.to.X = cells[id].X
+                            obj.to.Y = cells[id].Y
+                            outp.push(obj)
+                            return outp
+                        })
                             playSound('move')
                             flushSelected()
                         return
                         }
                         break
                     case 6:
+                        setCastled(3)
                         if (cells[5].piece == 'none' && cells[6].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
@@ -697,6 +767,27 @@ function App() {
                             return outp
                         })
                         setMove(prevState => prevState + 1)
+                        setMoves(prev => {
+                            let outp = [...prev]
+                            let obj = {}
+                            obj.from = {}
+                            obj.to = {}
+                            if (selected == -1) {
+                                obj.from.piece = 'none'
+                                obj.from.X = 'none'
+                                obj.from.Y = 'none'
+                            } else {
+                                obj.from.piece = 'king'
+                                obj.from.X = cells[selected].X
+                                obj.from.Y = cells[selected].Y
+                                obj.from.color = cells[selected].side
+                            }
+                            obj.to.piece = '4'
+                            obj.to.X = cells[id].X
+                            obj.to.Y = cells[id].Y
+                            outp.push(obj)
+                            return outp
+                        })
                         flushSelected()
                         return
                     }
@@ -712,6 +803,8 @@ function App() {
             && !kings.black.checked) {
                 switch (id) {
                     case 58:
+                        setCastled(2)
+                        
                         if (cells[57].piece == 'none' && cells[58].piece == 'none' && cells[59].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
@@ -734,11 +827,33 @@ function App() {
                             return outp
                         })
                         setMove(prevState => prevState + 1)
+                        setMoves(prev => {
+                            let outp = [...prev]
+                            let obj = {}
+                            obj.from = {}
+                            obj.to = {}
+                            if (selected == -1) {
+                                obj.from.piece = 'none'
+                                obj.from.X = 'none'
+                                obj.from.Y = 'none'
+                            } else {
+                                obj.from.piece = 'king'
+                                obj.from.X = cells[selected].X
+                                obj.from.Y = cells[selected].Y
+                                obj.from.color = cells[selected].side
+                            }
+                            obj.to.piece = '4'
+                            obj.to.X = cells[id].X
+                            obj.to.Y = cells[id].Y
+                            outp.push(obj)
+                            return outp
+                        })
                         flushSelected()
                         return
                     }
                     break
                     case 62:
+                        setCastled(4)
                         if (cells[61].piece == 'none' && cells[62].piece == 'none') {
                         setAllowed([])
                         setCells(prev => {
@@ -761,6 +876,27 @@ function App() {
                             return outp
                         })
                         setMove(prevState => prevState + 1)
+                        setMoves(prev => {
+                            let outp = [...prev]
+                            let obj = {}
+                            obj.from = {}
+                            obj.to = {}
+                            if (selected == -1) {
+                                obj.from.piece = 'none'
+                                obj.from.X = 'none'
+                                obj.from.Y = 'none'
+                            } else {
+                                obj.from.piece = 'king'
+                                obj.from.X = cells[selected].X
+                                obj.from.Y = cells[selected].Y
+                                obj.from.color = cells[selected].side
+                            }
+                            obj.to.piece = '4'
+                            obj.to.X = cells[id].X
+                            obj.to.Y = cells[id].Y
+                            outp.push(obj)
+                            return outp
+                        })
                         flushSelected()
                         return
                     }
@@ -770,6 +906,27 @@ function App() {
                 }
             }
         if (allowed.includes(id)) {//IF PRESSED ON DARKENED SQUARE
+            setMoves(prev => {
+                let outp = [...prev]
+                let obj = {}
+                obj.from = {}
+                obj.to = {}
+                if (selected == -1) {
+                    obj.from.piece = 'none'
+                    obj.from.X = 'none'
+                    obj.from.Y = 'none'
+                } else {
+                    obj.from.piece = cells[selected].piece
+                    obj.from.X = cells[selected].X
+                    obj.from.Y = cells[selected].Y
+                    obj.from.color = cells[selected].side
+                }
+                obj.to.piece = cells[id].piece
+                obj.to.X = cells[id].X
+                obj.to.Y = cells[id].Y
+                outp.push(obj)
+                return outp
+            })
             setAllowed([])
             if (cells[id].piece != 'none') {
                 let points
@@ -869,7 +1026,12 @@ function App() {
             }
             setCells(prevState => {
                 let outp = [...prevState]
-                outp[id].piece === 'none' ? playSound('move') : playSound('capture')
+
+                if (outp[id].piece === 'none') {
+                    if (kings.white.checked || kings.black.checked) {
+                        setWhichSound(1)
+                    } else setWhichSound(2)
+                } else playSound('capture')
                 if (outp[selected].piece === 'king') {
                     switch(outp[selected].side) {
                         case 'white':
@@ -894,7 +1056,9 @@ function App() {
                 outp[id].side = outp[selected].side === 'none' ? outp[id].side : outp[selected].side
                 outp[selected].piece = 'none'
                 outp[selected].side = 'none'
+                
                 setMove(prevState => prevState + 1)
+                
                 flushSelected()
                 return outp
             })
@@ -1275,7 +1439,7 @@ function App() {
         }
         minutes = Math.floor(ctime/60)
         seconds = ctime%60
-        time = `${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`
+        time = `${minutes}:${seconds < 10 && seconds >= 0 ? `0${seconds}` : Math.abs(seconds)}`
         return time
     }
     let dispWT = timerProcessor('white'), dispBT = timerProcessor('black')
@@ -1376,6 +1540,11 @@ function App() {
         accent: localStorage.getItem('accent') || '808080'
     })
 
+    function handleRewind(state) {
+        setCells(state)
+        /*setCaptured(state.captured)
+        setKings(state.kings)*/
+    }
 
     function handleCustom(ev, el) {
         setCustom(prev => {
@@ -1386,6 +1555,7 @@ function App() {
             return outp
         })
     }
+    
 
     return (
         <div>
@@ -1436,6 +1606,7 @@ function App() {
                 <img src={theme === 'classic' && archess || theme === 'contrasted' && archessC || theme === 'lcontrast' && archessC} />
             </div>
             <div className="footer-wrapper">
+                <MoveBar memory={memory} moves={moves} move={move} castled={castled} used={used} captured={captured} cells={cells} kings={kings} handleRewind={handleRewind}/>
                 <div className="footer">
                     <div style={{display: 'flex', alignItems:'center', justifyContent: 'left'}}>
                         <img className='sep sep1' src={wspng}/>

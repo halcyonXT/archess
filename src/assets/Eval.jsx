@@ -23,7 +23,7 @@ export default function Eval(props) {
     styles.margin = '0px'
     styles.lineHeight = 'max-content'
 
-    if (diff === 0) {
+    if (diff === 0 && props.winner == 'none') {
         styles.background= `-webkit-linear-gradient(white 48%, var(--black) 49%)`
         styles.WebkitBackgroundClip= 'text'
         styles.WebkitTextFillColor= 'transparent'
@@ -56,37 +56,38 @@ export default function Eval(props) {
         //return <img src={`/white${piece}.png`} style={{height:'25px', marginLeft: '-4px'}}/>
         switch (piece) {
             case 'king':
-                return <img src={whiteking} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whiteking} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'queen':
-                return <img src={whitequeen} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whitequeen} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'knight':
-                return <img src={whiteknight} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whiteknight} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'bishop':
-                return <img src={whitebishop} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whitebishop} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'rook':
-                return <img src={whiterook} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whiterook} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
             case 'pawn':
-                return <img src={whitepawn} style={{height:'1.9654vw', marginRight: '-0.1572vw'}}/>
+                return <img src={whitepawn} style={{height:'1.9654vw', marginRight: '-0.1572vw', filter: 'drop-shadow(0 0 0.2358vw white)'}}/>
         }
     })
     diff = diff <= 0 ? diff : `+${diff}`
 
     if (props.winner != 'none') {
         styles.textAlign = 'center'
+        styles.userSelect = 'none'
         switch(props.winner) {
             case 'black':
                 styles.color = '#3e4140'
-                styles.textShadow = '#3e4140 0px 0px 0.7862vw'
+                //styles.textShadow = '#3e4140 0px 0px 0.7862vw'
                 diff = props.kings.white.mated ? 'CHECKMATE' : `BLACK WON ON TIME`
-                styles.width = '800px'
+                styles.width = '62.8931vw'
                 dispW = null
                 dispB = null
                 break
             case 'white':
                 styles.color = '#FFFFFF'
-                styles.textShadow = 'white 0px 0px 0.7862vw'
+                //styles.textShadow = 'white 0px 0px 0.7862vw'
                 diff = props.kings.black.mated ? 'CHECKMATE' : `WHITE WON ON TIME`
-                styles.width = '800px'
+                styles.width = '62.8931vw'
                 dispW = null
                 dispB = null
                 break

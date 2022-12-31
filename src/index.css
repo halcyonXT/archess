@@ -28,6 +28,7 @@ body {
 }
 
 .mainframe {
+    margin-top: -2vw;
     border-radius: 0.1572vw;
     border: 0.1572vw solid var(--main);
     outline: 0.4717vw double #3e4140;
@@ -46,7 +47,7 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
-    height: 5.5031vw;
+    height: 4.5031vw;
     background-color: var(--accent);
 }
 .logo > img {pointer-events: none; user-select: none; -webkit-user-drag: none;}
@@ -240,13 +241,13 @@ body {
 
 @keyframes animTop {
     to {
-        margin-top: calc(-50vh + 5.5031vw);
+        margin-top: calc(-50vh + 4.5031vw);
     }
 }
 
 @keyframes animBot {
     to {
-        height: 5.5031vw;
+        height: 7.5031vw;
     }
 }
 
@@ -344,4 +345,49 @@ body {
 
 .genText {
     font-size: 1.5723vw;
+}
+
+.move-bar {
+    position: absolute;
+    z-index: 87;
+    width: 100%;
+    height: 1.8447vw;
+    background-color: #3e4140;
+    margin-top: calc(100vh - 7.3031vw);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    gap: 0.2619vw;
+}
+
+.-main {
+    margin-top: -3vw;
+}
+
+.move-card {
+    outline: 0.042vw solid rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.295);
+    font-weight: bold;
+    padding-left: 0.2619vw;
+    font-size: 0.8381vw;
+    padding-right: 0.2619vw;
+    border-radius: 0.3758vw;
+    letter-spacing: 0.1048vw;
+    font-family: 'Staatliches', sans-serif;
+    user-select: none;
+    -webkit-user-drag: none;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.move-card:hover {
+    transition-duration: 0.15s;
+    background-color: rgba(255, 255, 255, 0.438);
+}
+
+.move-img {
+    height: 0.9429vw;
+    margin-right: 0.2619vw;
 }

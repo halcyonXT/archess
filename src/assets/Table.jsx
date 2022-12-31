@@ -125,7 +125,7 @@ export default function Table(props) {
         }
     }
     return (
-        <table>
+        <table className='-main'>
             <tbody className="mainframe">
                 <tr>{displayCells.slice(0, 8)}</tr>
                 <tr>{displayCells.slice(8, 16)}</tr>
