@@ -14,12 +14,27 @@ import whitepawn from '/whitepawn.png'
 
 export default function Table(props) {
     const getStyles = (id, white = false) => {
+        let shadowVal = 0
+        if (props.theme === 'contrasted'){
+            if (props.cells[id].Y % 2 === 0) {
+                props.cells[id].id % 2 === 0 ?
+                shadowVal = 0
+                :
+                shadowVal = 255
+            } else {
+                props.cells[id].id % 2 === 0 ?
+                shadowVal = 255
+                :
+                shadowVal = 0
+            }
+        }
         let styles = {}
+        
         if (id == props.selected) {
             styles.filter = 'brightness(85%)'
         }
         if (props.cells[id].selected) {
-            styles.boxShadow = 'inset 0px 0px 1.1792vw 0px rgba(0, 0, 0, 0.7)'
+            styles.boxShadow = `inset 0px 0px 1.1792vw 0px rgba(${shadowVal}, ${shadowVal}, ${shadowVal}, 0.7)`
         }
         if (white) {styles.backgroundColor = 'white'}
         if (id === props.kings.white.pos) {

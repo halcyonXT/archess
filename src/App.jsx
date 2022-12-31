@@ -138,6 +138,7 @@ function playSound(type) {
 function App() {
     const [memory, setMemory] = React.useState([])
     let promsqrs = [[0,1,2,3,4,5,6,7],[56,57,58,59,60,61,62,63]]//SQUARES FOR PROMOTION
+    let ppawnsqrs = [[8,9,10,11,12,13,14,15],[55,54,53,52,51,50,49,48]]
     /* TIMER STUFF */
     const [timers, setTimers] = React.useState({
         white: 600000,
@@ -646,7 +647,8 @@ function App() {
         if (selected != -1
             && cells[selected].piece === 'pawn'
             && cells[selected].side === 'white'
-            && promsqrs[0].includes(id)) {
+            && promsqrs[0].includes(id)
+            && ppawnsqrs[0].includes(selected)) {
                 setAllowed([])
                 setCells(prev => {
                     let outp = [...prev]
@@ -668,7 +670,8 @@ function App() {
         if (selected != -1
             && cells[selected].piece === 'pawn'
             && cells[selected].side === 'black'
-            && promsqrs[1].includes(id)) {
+            && promsqrs[1].includes(id)
+            && ppawnsqrs[1].includes(selected)) {
                 setAllowed([])
                 setCells(prev => {
                     let outp = [...prev]
@@ -1508,15 +1511,15 @@ function App() {
                 break
             case 'contrasted':
                 setTheme('contrasted')
-                document.documentElement.style.setProperty('--settings', 'white');
+                document.documentElement.style.setProperty('--settings', '#2A2A2A');
                 document.documentElement.style.setProperty('--accent', 'black');
                 document.documentElement.style.setProperty('--main', 'white');
                 document.documentElement.style.setProperty('--black', '#3e4140');
-                document.documentElement.style.setProperty('--darkcell', '#E5C299');
+                document.documentElement.style.setProperty('--darkcell', 'black');
                 break
             case 'mahogany':
                 setTheme('classic')//#BD9B6D
-                document.documentElement.style.setProperty('--settings', '#545655');
+                document.documentElement.style.setProperty('--settings', "#C5A279");
                 document.documentElement.style.setProperty('--accent', '#DDC3A2');
                 document.documentElement.style.setProperty('--main', '#F7F8E8');
                 document.documentElement.style.setProperty('--black', '#3e4140');
@@ -1528,7 +1531,7 @@ function App() {
                 document.documentElement.style.setProperty('--accent', '#454545');
                 document.documentElement.style.setProperty('--main', 'rgb(39, 39, 39)');
                 document.documentElement.style.setProperty('--black', 'white');
-                document.documentElement.style.setProperty('--darkcell', '#008B8B');
+                document.documentElement.style.setProperty('--darkcell', '#AFCBCB');
                 break
         }
     }
@@ -1628,7 +1631,7 @@ function App() {
                 </div>
             </div>
             <div style={{width:"100%", height:"100vh", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                <Table cells={cells} handleSelect={handleSelect} selected={selected} kings={kings}/>
+                <Table theme={theme} cells={cells} handleSelect={handleSelect} selected={selected} kings={kings}/>
             </div>
         </div>
     )

@@ -76,7 +76,7 @@ export default function Eval(props) {
         styles.userSelect = 'none'
         switch(props.winner) {
             case 'black':
-                styles.color = '#3e4140'
+                styles.color = 'var(--black)'
                 //styles.textShadow = '#3e4140 0px 0px 0.7862vw'
                 diff = props.kings.white.mated ? 'CHECKMATE' : `BLACK WON ON TIME`
                 styles.width = '62.8931vw'

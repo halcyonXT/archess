@@ -247,7 +247,7 @@ body {
 
 @keyframes animBot {
     to {
-        height: 7.5031vw;
+        height: 7.3031vw;
     }
 }
 
@@ -352,7 +352,7 @@ body {
     z-index: 87;
     width: 100%;
     height: 1.8447vw;
-    background-color: #3e4140;
+    background-color: var(--settings);
     margin-top: calc(100vh - 7.3031vw);
     display: flex;
     align-items: center;
